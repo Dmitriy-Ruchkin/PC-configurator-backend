@@ -26,7 +26,16 @@ const componentsSchema = new mongoose.Schema({
     description: String,
 });
 
+const usersSchema = new mongoose.Schema({
+    _id: mongoose.Schema.Types.ObjectId,
+    name: String,
+    email: String,
+    password: String,
+    repeatPassword: String,
+});
+
 const Components = mongoose.model('Components', componentsSchema);
+const Users = mongoose.model('Users', usersSchema)
 
 app.get('/api/components', async (req,res) => {
     await Components.find({},(error, data) => {
@@ -41,6 +50,20 @@ app.get('/api/components', async (req,res) => {
 })
 
 app.get('/api/components/:type', async (req,res) => {
+    let searchName = req.params.type
+    await Components.find({ type: searchName}, (error, data) => {
+        if (!error) {
+            res.json( data )
+        } else {
+            return res.status(400).send({
+                message: error
+            })
+        }
+    })
+
+})
+
+app.get('/api/sign-upnpm run', async (req,res) => {
     let searchName = req.params.type
     await Components.find({ type: searchName}, (error, data) => {
         if (!error) {
